@@ -22,7 +22,8 @@ class STLViewer extends Component {
     model: PropTypes.oneOfType([
       PropTypes.string,
       PropTypes.instanceOf(ArrayBuffer)
-    ]).isRequired
+    ]).isRequired,
+    onUpdate: PropTypes.func
   };
 
   static defaultProps = {
@@ -38,12 +39,17 @@ class STLViewer extends Component {
     lights: [0, 0, 1],
     lightColor: '#ffffff',
     rotationSpeeds: [0, 0, 0.02],
-    model: undefined
+    model: undefined,
+    onUpdate: () => {}
   };
 
   componentDidMount() {
     this.paint = new Paint();
-    this.paint.init(this);
+    this.paint.init(this).then(() => {
+      this.props.onUpdate({
+        dimensions: this.paint.getMeshDimensions()
+      });
+    });
   }
 
   shouldComponentUpdate(nextProps, nextState) {
@@ -52,7 +58,11 @@ class STLViewer extends Component {
 
   componentWillUpdate(nextProps, nextState) {
     this.props = nextProps;
-    this.paint.init(this);
+    this.paint.init(this).then(() => {
+      this.props.onUpdate({
+        dimensions: this.paint.getMeshDimensions()
+      });
+    });
   }
 
   componentWillUnmount() {

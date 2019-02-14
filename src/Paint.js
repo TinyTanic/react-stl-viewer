@@ -60,7 +60,7 @@ class Paint {
     }
 
     this.reqNumber += 1;
-    this.addSTLToScene(this.reqNumber);
+    return this.addSTLToScene(this.reqNumber);
   }
 
   addLight(lights, index = 0) {
@@ -245,6 +245,17 @@ class Paint {
     }
 
     this.renderer.render(this.scene, this.camera);
+  }
+
+  getMeshDimensions() {
+    if (this.mesh) {
+      const bbox = this.mesh.geometry.boundingBox;
+      return {
+        width: Math.round(bbox.max.x - bbox.min.x),
+        height: Math.round(bbox.max.y - bbox.min.y),
+        depth: Math.round(bbox.max.z - bbox.min.z)
+      };
+    }
   }
 }
 
