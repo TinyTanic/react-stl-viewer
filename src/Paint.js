@@ -29,6 +29,7 @@ class Paint {
     this.lights = context.props.lights;
     this.lightColor = context.props.lightColor;
     this.model = context.props.model;
+    this.gridDimension = context.props.gridDimension;
 
     if (this.mesh !== undefined) {
       this.scene.remove(this.mesh);
@@ -136,6 +137,16 @@ class Paint {
       // Start the animation
       this.animate();
     });
+  }
+
+  addGrid() {
+    const dimensions = this.getMeshDimensions();
+    if (dimensions) {
+      const divisions = this.gridDimension / 10;
+      const gridHelper = new THREE.GridHelper(this.gridDimension, divisions);
+      gridHelper.position.y -= dimensions.height / 2;
+      this.scene.add(gridHelper);
+    }
   }
 
   addCamera() {

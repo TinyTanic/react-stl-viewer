@@ -23,6 +23,7 @@ class STLViewer extends Component {
       PropTypes.string,
       PropTypes.instanceOf(ArrayBuffer)
     ]).isRequired,
+    gridDimension: PropTypes.number,
     onUpdate: PropTypes.func
   };
 
@@ -40,6 +41,7 @@ class STLViewer extends Component {
     lightColor: '#ffffff',
     rotationSpeeds: [0, 0, 0.02],
     model: undefined,
+    gridDimension: 100,
     onUpdate: () => {}
   };
 
