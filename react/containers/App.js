@@ -46,9 +46,9 @@ class App extends Component {
           model={this.state.model}
           modelColor={this.state.color}
           lights={[[0.5, 1, -1], [1, 1, 1]]}
-          showGrid={true}
-          rotate={false}
+          rotate={true}
           onUpdate={this.onUpdate}
+          gridDimension={100}
         />
         <button onClick={this.clickRed}>red</button>
         <button onClick={this.clickBlue}>blue</button>

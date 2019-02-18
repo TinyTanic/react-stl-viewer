@@ -143,9 +143,9 @@ class Paint {
     const dimensions = this.getMeshDimensions();
     if (dimensions) {
       const divisions = this.gridDimension / 10;
-      const gridHelper = new THREE.GridHelper(this.gridDimension, divisions);
-      gridHelper.position.y -= dimensions.height / 2;
-      this.scene.add(gridHelper);
+      this.grid = new THREE.GridHelper(this.gridDimension, divisions);
+      this.grid.position.y -= dimensions.height / 2;
+      this.scene.add(this.grid);
     }
   }
 
@@ -201,6 +201,10 @@ class Paint {
     // note: three.js includes requestAnimationFrame shim
     if (this.rotate) {
       this.animationRequestId = requestAnimationFrame(this.animate.bind(this));
+    } else {
+      if (this.gridDimension) {
+        this.addGrid();
+      }
     }
 
     if (this.orbitControls) {
@@ -254,7 +258,6 @@ class Paint {
       this.mesh.rotation.y += this.rotationSpeeds[1];
       this.mesh.rotation.z += this.rotationSpeeds[2];
     }
-
     this.renderer.render(this.scene, this.camera);
   }
 
