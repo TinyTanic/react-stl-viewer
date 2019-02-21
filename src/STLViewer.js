@@ -24,7 +24,8 @@ class STLViewer extends Component {
       PropTypes.instanceOf(ArrayBuffer)
     ]).isRequired,
     gridDimension: PropTypes.number,
-    onUpdate: PropTypes.func
+    onUpdate: PropTypes.func,
+    scale: PropTypes.number
   };
 
   static defaultProps = {
@@ -42,7 +43,8 @@ class STLViewer extends Component {
     rotationSpeeds: [0, 0, 0.02],
     model: undefined,
     gridDimension: 100,
-    onUpdate: () => {}
+    onUpdate: () => {},
+    scale: 1
   };
 
   componentDidMount() {

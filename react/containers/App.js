@@ -6,7 +6,8 @@ class App extends Component {
     super(props);
     this.state = {
       color: '#FF0000',
-      model: undefined
+      model: undefined,
+      scale: 1
     };
 
     this.clickBlue = this.clickBlue.bind(this);
@@ -36,22 +37,33 @@ class App extends Component {
     console.log(update);
   };
 
+  onChangeScale = ({ target }) => {
+    this.setState({ scale: parseFloat(target.value) });
+  };
+
   render() {
     return (
       <div>
         <input id="image-file" type="file" onChange={this.onChange} />
         <STLViewer
-          // url="dist/static/crazy-things.stl"
-          url="https://cdn2.myminifactory.com/asets/object-assets/579fd4de8bd7d/threedfiles/ring-poly-2-1.stl"
           model={this.state.model}
           modelColor={this.state.color}
           lights={[[0.5, 1, -1], [1, 1, 1]]}
-          rotate={true}
+          rotate={false}
           onUpdate={this.onUpdate}
+          scale={this.state.scale}
           gridDimension={100}
         />
         <button onClick={this.clickRed}>red</button>
         <button onClick={this.clickBlue}>blue</button>
+        <input
+          type="number"
+          placeholder="scale"
+          step=".1"
+          min="0"
+          value={this.state.scale}
+          onChange={this.onChangeScale}
+        />
       </div>
     );
   }

@@ -30,12 +30,16 @@ class Paint {
     this.lightColor = context.props.lightColor;
     this.model = context.props.model;
     this.gridDimension = context.props.gridDimension;
+    this.scale = context.props.scale || 1;
 
     if (this.mesh !== undefined) {
       this.scene.remove(this.mesh);
       this.mesh.geometry.dispose();
       this.mesh.material.dispose();
       this.scene.remove(this.grid);
+      this.lights.forEach(light => {
+        this.scene.remove(light);
+      });
     }
     const directionalLightObj = this.scene.getObjectByName(DIRECTIONAL_LIGHT);
     if (directionalLightObj) {
@@ -133,6 +137,7 @@ class Paint {
       this.addCamera();
       this.addInteractionControls();
       this.addToReactComponent();
+      console.log('this.mesh', this.mesh);
 
       // Start the animation
       this.animate();
@@ -150,27 +155,29 @@ class Paint {
   }
 
   addCamera() {
-    // Add the camera
-    this.camera = new THREE.PerspectiveCamera(
-      30,
-      this.width / this.height,
-      1,
-      this.distance
-    );
+    if (!this.camera) {
+      // Add the camera
+      this.camera = new THREE.PerspectiveCamera(
+        30,
+        this.width / this.height,
+        1,
+        this.distance
+      );
 
-    if (this.cameraZ === null) {
-      this.cameraZ = Math.max(this.xDims * 3, this.yDims * 3, this.zDims * 3);
+      if (this.cameraZ === null) {
+        this.cameraZ = Math.max(this.xDims * 3, this.yDims * 3, this.zDims * 3);
+      }
+
+      this.camera.position.set(this.cameraX, this.cameraY, this.cameraZ);
+
+      this.scene.add(this.camera);
+
+      this.camera.lookAt(this.mesh);
+
+      this.renderer.set;
+      this.renderer.setSize(this.width, this.height);
+      this.renderer.setClearColor(this.backgroundColor, 1);
     }
-
-    this.camera.position.set(this.cameraX, this.cameraY, this.cameraZ);
-
-    this.scene.add(this.camera);
-
-    this.camera.lookAt(this.mesh);
-
-    this.renderer.set;
-    this.renderer.setSize(this.width, this.height);
-    this.renderer.setClearColor(this.backgroundColor, 1);
   }
 
   addInteractionControls() {
@@ -236,6 +243,10 @@ class Paint {
       this.scene.remove(this.mesh);
       delete this.mesh;
     }
+    this.scene.remove(this.grid);
+    this.lights.forEach(light => {
+      this.scene.remove(light);
+    });
     const directionalLightObj = this.scene.getObjectByName(DIRECTIONAL_LIGHT);
     if (directionalLightObj) {
       this.scene.remove(directionalLightObj);
@@ -258,6 +269,9 @@ class Paint {
       this.mesh.rotation.y += this.rotationSpeeds[1];
       this.mesh.rotation.z += this.rotationSpeeds[2];
     }
+    this.mesh.scale.x = this.scale;
+    this.mesh.scale.y = this.scale;
+    this.mesh.scale.z = this.scale;
     this.renderer.render(this.scene, this.camera);
   }
 
